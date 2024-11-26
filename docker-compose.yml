@@ -99,7 +99,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.cvat.loadbalancer.server.port=8080
-      - traefik.http.routers.cvat.rule=Host(`${CVAT_HOST:-localhost}`) &&
+      - traefik.http.routers.cvat.rule=PathPrefix(`/`) &&
         PathPrefix(`/api/`, `/static/`, `/admin`, `/documentation/`, `/django-rq`)
       - traefik.http.routers.cvat.entrypoints=web
     volumes:
@@ -233,7 +233,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.cvat-ui.loadbalancer.server.port=80
-      - traefik.http.routers.cvat-ui.rule=Host(`${CVAT_HOST:-localhost}`)
+      - traefik.http.routers.cvat-ui.rule=PathPrefix(`/`)
       - traefik.http.routers.cvat-ui.entrypoints=web
     networks:
       - cvat
@@ -243,8 +243,8 @@ services:
     container_name: traefik
     restart: always
     ports:
-      - 8080:8080
-      - 8090:8090
+      - "0.0.0.0:8080:8080"
+      - "0.0.0.0:8090:8090"
     environment:
       CVAT_HOST: ${CVAT_HOST:-localhost}
       DJANGO_LOG_VIEWER_HOST: grafana
